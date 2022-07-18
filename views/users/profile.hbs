@@ -14,7 +14,12 @@
         <h5 class="card-title">{{user.name}}</h5>
         <p class="card-text">{{user.email}}</p>
         <p class="card-text">已評論餐廳：{{user.Comments.length}}間</p>
+        {{#if isUser}}
         <a class="btn btn-primary" href="/users/{{user.id}}/edit">edit</a>
+        <a class="btn btn-outline-secondary" href="/users/top">Back</a>
+        {{else}}
+        <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
+        {{/if}}
       </div>
     </div>
   </div>

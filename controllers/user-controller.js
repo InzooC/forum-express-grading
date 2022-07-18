@@ -48,7 +48,8 @@ const userController = {
     })
       .then(user => {
         if (!user) throw new Error("user didn't exist!")
-        return res.render('users/profile', { user: user.toJSON() })
+        const isUser = req.user.id === user.id
+        return res.render('users/profile', { user: user.toJSON(), isUser })
       })
       .catch(err => next(err))
   },
