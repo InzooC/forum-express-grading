@@ -14,25 +14,11 @@ const adminController = {
       .catch(err => next(err))
   },
   postRestaurant: (req, res, next) => {
-    const { name, tel, address, openingHours, description, categoryId } = req.body
-    if (!name) throw new Error('Restaurant name is required!')
-
-    const { file } = req // 把圖片檔案取出來
-    imgurFileHandler(file) // 把取出的圖片檔案傳給 file-helper 處理後
-      .then(filePath => Restaurant.create({ // 再 create 這筆餐廳資料
-        name,
-        tel,
-        address,
-        openingHours,
-        description,
-        image: filePath || null,
-        categoryId
-      }))
-      .then(() => {
-        req.flash('success_messages', 'restaurant was successfully created')
-        res.redirect('/admin/restaurants')
-      })
-      .catch(err => next(err))
+    adminServices.postRestaurant(req, (err, data) => {
+      if (err) return next(err)
+      req.flash('success_messages', 'restaurant was successfully created')
+      res.redirect('/admin/restaurants', data)
+    })
   },
   getRestaurant: (req, res, next) => {
     Restaurant.findByPk(req.params.id, {
@@ -85,13 +71,7 @@ const adminController = {
       .catch(err => next(err))
   },
   deleteRestaurant: (req, res, next) => {
-    return Restaurant.findByPk(req.params.id)
-      .then(restaurant => {
-        if (!restaurant) throw new Error("Restaurant didn't exist!")
-        return restaurant.destroy()
-      })
-      .then(() => res.redirect('/admin/restaurants'))
-      .catch(err => next(err))
+    adminServices.deleteRestaurant(req, (err, data) => err ? next(err) : res.redirect('/admin/restaurants', data))
   },
   getUsers: (req, res, next) => {
     return User.findAll({
