@@ -14,7 +14,11 @@ router.use('/admin', authenticatedAdmin, admin)
 router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)
 router.get('/signin', userController.signInPage)
+
+// router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
 router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
+// failureFlash 還沒寫進去
+
 router.get('/logout', userController.logout)
 router.get('/restaurants/top', authenticated, restController.getTopRestaurants)
 router.get('/restaurants/feeds', authenticated, restController.getFeeds)

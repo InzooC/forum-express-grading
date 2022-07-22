@@ -14,10 +14,14 @@ const userController = {
       res.redirect('/signin', data)
     })
   },
-  signInPage: (req, res) => {
+  signInPage: (req, res, next) => {
     res.render('signin')
   },
   signIn: (req, res) => {
+    // if (?) {
+    //   req.flash('error_messages', '帳號或密碼輸入錯誤！')
+    //   res.redirect('/signin')
+    // } 目前無法顯示登入失敗的page版本
     req.flash('success_messages', '成功登入！')
     res.redirect('/restaurants')
   },

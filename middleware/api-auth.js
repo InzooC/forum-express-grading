@@ -8,7 +8,6 @@ const authenticated = (req, res, next) => {
     if (user) {
       req.user = user
     }
-
     next()
   })(req, res, next)
 }
