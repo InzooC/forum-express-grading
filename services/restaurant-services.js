@@ -1,4 +1,4 @@
-const { Restaurant, Category } = require('../models')
+const { Restaurant, Category, User, Comment } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const restaurantServices = {
@@ -36,6 +36,26 @@ const restaurantServices = {
           categoryId,
           pagination: getPagination(limit, page, restaurants.count)
         })
+      })
+      .catch(err => cb(err))
+  },
+  getRestaurant: (req, cb) => {
+    const id = req.params.id
+    Restaurant.findByPk(id, {
+      include: [
+        Category,
+        { model: Comment, include: User },
+        { model: User, as: 'FavoritedUsers' },
+        { model: User, as: 'LikedUsers' }
+      ]
+    })
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant doesn't exist!")
+        const isFavorited = restaurant.FavoritedUsers.some(f => f.id === req.user.id)
+        const isLiked = restaurant.LikedUsers.some(l => l.id === req.user.id)
+        restaurant.viewCounts += 1
+        restaurant.save()
+        return cb(null, { restaurant, isFavorited, isLiked })
       })
       .catch(err => cb(err))
   }
