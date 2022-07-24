@@ -19,6 +19,15 @@ const restaurantController = {
         message: '成功拿到餐廳資料',
         data
       }))
+  },
+  getNewRestaurants: (req, res, next) => {
+    restaurantServices.getNewRestaurants(req, (err, data) => err
+      ? next(err)
+      : res.json({
+        status: 'success',
+        message: '成功拿到最新的10筆餐廳資料',
+        data
+      }))
   }
 }
 

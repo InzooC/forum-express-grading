@@ -58,6 +58,18 @@ const restaurantServices = {
         return cb(null, { restaurant, isFavorited, isLiked })
       })
       .catch(err => cb(err))
+  },
+  getNewRestaurants: (req, cb) => {
+    Restaurant.findAll({
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      include: [Category],
+      raw: true,
+      nest: true
+    })
+      .then(restaurants => {
+        return cb(null, { restaurants })
+      })
   }
 }
 module.exports = restaurantServices
